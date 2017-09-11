@@ -8,14 +8,14 @@
 
   <ItemGroup>
     <Compile Remove="Cases\SimpleExample\Outputs\SimpleExampleDbContext.cs" />
-    <Compile Remove="Cases\SimpleExample\Outputs\SimpleExampleQuery.cs" />
+    <Compile Remove="Cases\SimpleExample\Outputs\SimpleExampleQueryBase.cs" />
     <Compile Remove="Cases\SimpleExample\Outputs\SimpleExampleSchema.cs" />
     <Compile Remove="Cases\SimpleExample\Outputs\Todo.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Cases\SimpleExample\Outputs\SimpleExampleDbContext.cs" />
-    <None Include="Cases\SimpleExample\Outputs\SimpleExampleQuery.cs" />
+    <None Include="Cases\SimpleExample\Outputs\SimpleExampleQueryBase.cs" />
     <None Include="Cases\SimpleExample\Outputs\SimpleExampleSchema.cs" />
     <None Include="Cases\SimpleExample\Outputs\Todo.cs" />
   </ItemGroup>

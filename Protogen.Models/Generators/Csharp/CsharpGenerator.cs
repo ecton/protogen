@@ -21,7 +21,7 @@ namespace Protogen.Models.Generators.Csharp
                 results[$"{project.Name.Pascalize()}Schema.cs"] = new QLSchema(project).Generate();
                 if (project.AllQueries.Any())
                 {
-                    results[$"{project.Name.Pascalize()}Query.cs"] = new QLFieldsClass(project, "Query", project.AllQueries).Generate();
+                    results[$"{project.Name.Pascalize()}QueryBase.cs"] = new QLFieldsClass(project, "Query", project.AllQueries).Generate();
                 }
             }
 
