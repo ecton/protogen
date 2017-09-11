@@ -9,5 +9,24 @@
       "null": false,
       "default": false
     }
-  }
+  },
+  "queries": [
+    {
+      "name": "allTodos",
+      "arguments": [
+        {
+          "name": "offset",
+          "default": 0,
+          "description": "The offset to start the query at",
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "default": 50,
+          "description": "The number of rows to return",
+          "type": "integer"
+        }
+      ]
+    }
+  ]
 }

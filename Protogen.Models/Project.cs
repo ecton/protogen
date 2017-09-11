@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Protogen.Models.Generators.Csharp;
@@ -20,7 +21,6 @@ namespace Protogen.Models
             }
         }
         private List<Model> _models = new List<Model>();
-        [JsonIgnore]
         public IEnumerable<Model> AllModels { get => _models; }
         public Project(string path)
         {
@@ -41,6 +41,7 @@ namespace Protogen.Models
         public Dictionary<string, string> GenerateFiles()
         {
             // TODO: Look up language based on project setting
+            Preprocess();
             var generator = new CsharpGenerator();
             return generator.Generate(this);
         }
@@ -49,8 +50,29 @@ namespace Protogen.Models
         {
             foreach (var model in _models)
             {
+                model.Project = this;
                 model.Preprocess();
             }
+        }
+
+        public Model ModelNamed(string name)
+        {
+            try
+            {
+                return AllModels.Where(m => m.Name == name).First();
+            }
+            catch
+            {
+                throw new ArgumentException($"Model not found: {name}");
+            }
+        }
+        public IEnumerable<QLField> AllQueries
+        {
+            get => _models.SelectMany(m => m.Queries ?? Enumerable.Empty<QLField>());
+        }
+        public IEnumerable<QLField> AllMutations
+        {
+            get => _models.SelectMany(m => m.Mutations ?? Enumerable.Empty<QLField>());
         }
     }
 }

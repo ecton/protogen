@@ -18,6 +18,10 @@ namespace Protogen.Models
                 }
             }
         }
+        public QLField[] Queries { get; set; }
+        public QLField[] Mutations { get; set; }
+        public Project Project { get; set; }
+
         private List<ModelField> _fields = new List<ModelField>();
         public IEnumerable<ModelField> AllFields { get => _fields.OrderBy(f => !f.PrimaryKey).ThenBy(f => f.Name); }
 
@@ -27,6 +31,21 @@ namespace Protogen.Models
         {
             foreach (var field in _fields)
             {
+                field.Model = this;
+                field.Preprocess();
+            }
+
+            foreach (var field in Queries ?? Enumerable.Empty<QLField>())
+            {
+                field.Project = Project;
+                field.Type = Name;
+                field.Preprocess();
+            }
+
+            foreach (var field in Mutations ?? Enumerable.Empty<QLField>())
+            {
+                field.Project = Project;
+                field.Type = Name;
                 field.Preprocess();
             }
         }

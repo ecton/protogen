@@ -61,7 +61,7 @@ namespace Protogen.Models.Generators.Csharp
         private void RenderField(ModelField field)
         {
             RenderAttributes(field);
-            _generator.AppendLine($"public {FieldTypeToCsharp(field)} {field.Name.Pascalize()} {{ get; set; }}");
+            _generator.AppendLine($"public {CsharpGenerator.Type(field.ResolvedType, field.Null)} {field.Name.Pascalize()} {{ get; set; }}");
         }
 
         private void RenderAttributes(ModelField field)
@@ -98,62 +98,11 @@ namespace Protogen.Models.Generators.Csharp
             _generator.AppendLine(")]");
         }
 
-        private string FieldTypeToCsharp(ModelField field)
-        {
-            string cType = null;
-            bool inherentlyNullable = false;
-            switch (field.Type)
-            {
-                case ModelField.FieldType.Text:
-                case ModelField.FieldType.String:
-                    cType = "string";
-                    inherentlyNullable = true;
-                    break;
-                case ModelField.FieldType.Boolean:
-                    cType = "bool";
-                    break;
-                case ModelField.FieldType.Integer:
-                    cType = "int";
-                    break;
-                case ModelField.FieldType.BigInteger:
-                    cType = "long";
-                    break;
-                case ModelField.FieldType.Float:
-                    cType = "float";
-                    break;
-                case ModelField.FieldType.Double:
-                    cType = "double";
-                    break;
-                case ModelField.FieldType.Date:
-                    cType = "NpgsqlDate";
-                    break;
-                case ModelField.FieldType.DateTime:
-                    cType = "NpgsqlDateTime";
-                    break;
-                case ModelField.FieldType.Time:
-                    cType = "NpgsqlDateTime";
-                    break;
-                case ModelField.FieldType.Guid:
-                    cType = "Guid";
-                    break;
-                case ModelField.FieldType.Auto:
-                    cType = "long"; // TODO: Look up type, especially for foreign keys
-                    break;
-                default:
-                    throw new NotImplementedException($"Unknown field type {field.Type}");
-            }
-            if (field.Null && !inherentlyNullable)
-            {
-                cType = cType + "?";
-            }
-            return cType;
-        }
-
         private string FieldTypeToDb(ModelField field)
         {
-            switch (field.Type)
+            switch (field.ResolvedType.FieldType)
             {
-                case ModelField.FieldType.DateTime:
+                case FieldType.DateTime:
                     return "timestamptz";
             }
             return null;

@@ -27,17 +27,30 @@ namespace Protogen.Models.Generators
                 _builder.Append(_currentWhitespace);
             }
         }
+        public CodeGenerator IncreaseIndentation()
+        {
+            _currentWhitespace += _indentation;
+            return this;
+        }
+
+        public CodeGenerator DecreaseIndentation()
+        {
+            _currentWhitespace = _currentWhitespace.Substring(_indentation.Length);
+            return this;
+        }
+
+
         public CodeGenerator BeginBlock(string opener = null)
         {
             AddWhitespaceToLineIfNeeded();
-            _currentWhitespace += _indentation;
             AppendLine(opener ?? _blockOpener);
+            IncreaseIndentation();
             return this;
         }
 
         public CodeGenerator EndBlock(string closer = null)
         {
-            _currentWhitespace = _currentWhitespace.Substring(_indentation.Length);
+            DecreaseIndentation();
             AddWhitespaceToLineIfNeeded();
             AppendLine(closer ?? _blockCloser);
             return this;
@@ -59,7 +72,7 @@ namespace Protogen.Models.Generators
             var lines = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             foreach (var line in lines)
             {
-                AddWhitespaceToLineIfNeeded();
+                if (line.Length > 0) AddWhitespaceToLineIfNeeded();
                 _builder.AppendLine(line);
                 _isStartOfLine = true;
             }

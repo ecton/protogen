@@ -9,6 +9,7 @@ namespace SimpleExample.Models
     [Table("todos")]
     public class Todo
     {
+        [Key]
         [Required]
         [Column("id")]
         public long Id { get; set; }

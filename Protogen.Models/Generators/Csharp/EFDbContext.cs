@@ -5,11 +5,11 @@ using Humanizer;
 
 namespace Protogen.Models.Generators.Csharp
 {
-    class DbContext
+    class EFDbContext
     {
         private Project _project;
         private CodeGenerator _generator = new CodeGenerator();
-        public DbContext(Project project)
+        public EFDbContext(Project project)
         {
             _project = project;
         }
