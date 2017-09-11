@@ -1,0 +1,7 @@
+﻿{
+  "name": "SimpleExample",
+  "engine": "Npgsql",
+  "models": [
+    "Todo"
+  ]
+}

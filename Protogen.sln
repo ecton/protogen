@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protogen", "Protogen\Protogen.csproj", "{3BE9BB84-3BEE-4D15-86EF-065A8AF84330}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protogen", "Protogen\Protogen.csproj", "{3BE9BB84-3BEE-4D15-86EF-065A8AF84330}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protogen.Models", "Protogen.Models\Protogen.Models.csproj", "{A03D9292-9317-40CB-AC37-932B6A10287B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protogen.Tests", "Protogen.Tests\Protogen.Tests.csproj", "{82DE4D4E-F05C-4B7A-BB11-2F05CBE0C39C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{3BE9BB84-3BEE-4D15-86EF-065A8AF84330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE9BB84-3BEE-4D15-86EF-065A8AF84330}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE9BB84-3BEE-4D15-86EF-065A8AF84330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A03D9292-9317-40CB-AC37-932B6A10287B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03D9292-9317-40CB-AC37-932B6A10287B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03D9292-9317-40CB-AC37-932B6A10287B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03D9292-9317-40CB-AC37-932B6A10287B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82DE4D4E-F05C-4B7A-BB11-2F05CBE0C39C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82DE4D4E-F05C-4B7A-BB11-2F05CBE0C39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82DE4D4E-F05C-4B7A-BB11-2F05CBE0C39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82DE4D4E-F05C-4B7A-BB11-2F05CBE0C39C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

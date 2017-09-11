@@ -1,0 +1,13 @@
+﻿{
+  "fields": {
+    "id": {
+      "primaryKey": true
+    },
+    "task": "string",
+    "complete": {
+      "type": "boolean",
+      "null": false,
+      "default": false
+    }
+  }
+}
