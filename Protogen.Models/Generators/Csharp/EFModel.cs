@@ -8,11 +8,9 @@ namespace Protogen.Models.Generators.Csharp
     public class EFModel
     {
         private CodeGenerator _generator = new CodeGenerator();
-        private Project _project;
         private Model _model;
-        public EFModel(Project project, Model model)
+        public EFModel(Model model)
         {
-            _project = project;
             _model = model;
         }
 
@@ -37,7 +35,7 @@ namespace Protogen.Models.Generators.Csharp
 
         private void BeginClass()
         {
-            _generator.AppendLine($"namespace {_project.Namespace ?? $"{_project.Name}.Models"}")
+            _generator.AppendLine($"namespace {_model.Project.Namespace ?? _model.Project.Name}.Models")
                       .BeginBlock()
                       .AppendLine($"[Table(\"{_model.Name.Underscore().Pluralize()}\")]")
                       .AppendLine($"public class {_model.Name.Pascalize()}")

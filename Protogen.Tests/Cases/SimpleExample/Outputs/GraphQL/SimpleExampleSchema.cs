@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using GraphQL;
 using GraphQL.Types;
 
-namespace SimpleExample.Models
+namespace SimpleExample.GraphQL
 {
     public class SimpleExampleSchema : Schema
     {

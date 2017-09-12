@@ -5,13 +5,13 @@ using Humanizer;
 
 namespace Protogen.Models.Generators.Csharp
 {
-    class QLSchema
+    class QLType
     {
-        private Project _project;
+        private Model _model;
         private CodeGenerator _generator = new CodeGenerator();
-        public QLSchema(Project project)
+        public QLType(Model model)
         {
-            _project = project;
+            _model = model;
         }
 
 
@@ -29,14 +29,15 @@ namespace Protogen.Models.Generators.Csharp
             _generator.AppendLine("using System;")
                       .AppendLine("using GraphQL;")
                       .AppendLine("using GraphQL.Types;")
+                      .AppendLine($"using {_model.Project.Namespace ?? _model.Project.Name}.GraphQL;")
                       .AppendLine();
         }
 
         private void BeginClass()
         {
-            _generator.AppendLine($"namespace {_project.Namespace ?? _project.Name}.GraphQL")
+            _generator.AppendLine($"namespace {_model.Project.Namespace ?? _model.Project.Name}.GraphQL")
                       .BeginBlock()
-                      .AppendLine($"public class {_project.Name.Pascalize()}Schema : Schema")
+                      .AppendLine($"public class {_model.Name.Pascalize()}Type : ObjectGraphType<{_model.Name.Pascalize()}>")
                       .BeginBlock();
         }
 
@@ -48,16 +49,12 @@ namespace Protogen.Models.Generators.Csharp
 
         private void RenderConstructor()
         {
-            _generator.AppendLine($"public {_project.Name.Pascalize()}Schema(Func<Type, GraphType> resolveType) : base(resolveType)")
+            _generator.AppendLine($"public {_model.Project.Name.Pascalize()}Type()")
                       .BeginBlock();
-            
-            if (_project.AllQueries.Count() > 0) {
-                _generator.AppendLine($"Query = ({_project.Name.Pascalize()}Query)resolveType(typeof({_project.Name.Pascalize()}Query));");
-            }
 
-            if (_project.AllMutations.Count() > 0)
+            foreach (var field in _model.AllFields)
             {
-                _generator.AppendLine($"Mutation = ({_project.Name.Pascalize()}Mutation)resolveType(typeof({_project.Name.Pascalize()}Mutation));");
+                _generator.AppendLine($"Field(\"{field.Name.Underscore()}\", x => x.{field.Name.Pascalize()}, nullable: {field.Null}).Description(@\"{field.Description}\");");
             }
 
             _generator.EndBlock();

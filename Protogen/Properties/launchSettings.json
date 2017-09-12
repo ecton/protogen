@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Protogen": {
+      "commandName": "Project",
+      "commandLineArgs": "gen --tests"
+    }
+  }
+}

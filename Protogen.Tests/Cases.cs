@@ -37,7 +37,8 @@ namespace Protogen.Tests
                 var outputsDir = caseDir.GetDirectories("Outputs")[0];
                 foreach (var fileInfo in project.GenerateFiles())
                 {
-                    var caseFile = outputsDir.GetFiles($"{fileInfo.Key}")[0];
+                    var fileInfoPath = string.Join(Path.DirectorySeparatorChar.ToString(), fileInfo.Key.Split('/'));
+                    var caseFile = outputsDir.GetFiles($"{fileInfoPath}")[0];
                     var expectedContents = File.ReadAllText(caseFile.FullName);
                     expectedContents = NormalizeLineEndings(expectedContents);
                     Assert.Equal(expectedContents, fileInfo.Value);

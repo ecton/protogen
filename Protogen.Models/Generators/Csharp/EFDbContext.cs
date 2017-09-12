@@ -36,7 +36,7 @@ namespace Protogen.Models.Generators.Csharp
 
         private void BeginClass()
         {
-            _generator.AppendLine($"namespace {_project.Namespace ?? $"{_project.Name}.Models"}")
+            _generator.AppendLine($"namespace {_project.Namespace ?? _project.Name}.Models")
                       .BeginBlock()
                       .AppendLine($"public class {_project.Name.Pascalize()}DbContext : DbContext")
                       .BeginBlock();

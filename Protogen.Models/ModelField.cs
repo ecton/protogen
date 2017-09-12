@@ -8,6 +8,7 @@ namespace Protogen.Models
     public class ModelField
     {
         public String Name { get; set; }
+        public string Description { get; set; }
         public bool PrimaryKey { get; set; }
         public string Type { get; set; }
         public ResolvedType ResolvedType { get; set; }

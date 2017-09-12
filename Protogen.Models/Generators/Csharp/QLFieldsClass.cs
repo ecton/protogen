@@ -38,7 +38,7 @@ namespace Protogen.Models.Generators.Csharp
 
         private void BeginClass()
         {
-            _generator.AppendLine($"namespace {_project.Namespace ?? $"{_project.Name}.Models"}")
+            _generator.AppendLine($"namespace {_project.Namespace ?? _project.Name}.GraphQL")
                       .BeginBlock()
                       .AppendLine($"public abstract class {_project.Name.Pascalize()}{_suffix}Base : ObjectGraphType")
                       .BeginBlock();
