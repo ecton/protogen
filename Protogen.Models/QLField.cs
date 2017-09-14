@@ -26,5 +26,9 @@ namespace Protogen.Models
                 }
             }
         }
+
+        public void ResolveAutoTypes()
+        {
+        }
     }
 }

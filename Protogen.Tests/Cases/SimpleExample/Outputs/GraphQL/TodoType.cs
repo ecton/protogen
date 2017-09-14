@@ -11,6 +11,7 @@ namespace SimpleExample.GraphQL
         {
             Field("id", x => x.Id, nullable: False).Description(@"");
             Field("complete", x => x.Complete, nullable: False).Description(@"");
+            Field("parent_id", x => x.ParentId, nullable: True).Description(@"");
             Field("task", x => x.Task, nullable: False).Description(@"");
         }
     }

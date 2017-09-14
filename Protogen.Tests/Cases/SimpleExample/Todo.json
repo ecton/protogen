@@ -4,6 +4,10 @@
       "primaryKey": true
     },
     "task": "string",
+    "parentId": {
+      "foreignKey": "todo.id",
+      "null":  true
+    },
     "complete": {
       "type": "boolean",
       "null": false,

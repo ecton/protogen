@@ -49,5 +49,22 @@ namespace Protogen.Models
                 field.Preprocess();
             }
         }
+        public void ResolveAutoTypes()
+        {
+            foreach (var field in _fields)
+            {
+                field.ResolveAutoTypes();
+            }
+
+            foreach (var field in Queries ?? Enumerable.Empty<QLField>())
+            {
+                field.ResolveAutoTypes();
+            }
+
+            foreach (var field in Mutations ?? Enumerable.Empty<QLField>())
+            {
+                field.ResolveAutoTypes();
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Humanizer;
 
 namespace Protogen.Models.Generators.Csharp
@@ -53,6 +53,17 @@ namespace Protogen.Models.Generators.Csharp
             foreach (var field in _model.AllFields)
             {
                 RenderField(field);
+                if (field.ForeignKey != null)
+                {
+                    RenderForeignKey(field);
+                }
+            }
+            foreach (var field in _model.Project.AllModels
+                                        .SelectMany(m => m.AllFields)
+                                        .Where(f => f.ForeignKey != null 
+                                                    && f.ForeignKey.RefersTo.Model == _model))
+            {
+                RenderInverseProperty(field);
             }
         }
 
@@ -96,6 +107,12 @@ namespace Protogen.Models.Generators.Csharp
             _generator.AppendLine(")]");
         }
 
+        private void RenderForeignKey(ModelField field)
+        {
+            _generator.AppendLine($"[ForeignKey(nameof({field.Name.Pascalize()}))]")
+                      .AppendLine($"public virtual {field.ForeignKey.RefersTo.Model.Name.Pascalize()} {field.AccessorName.Pascalize()} {{ get; set; }}");
+        }
+
         private string FieldTypeToDb(ModelField field)
         {
             switch (field.ResolvedType.FieldType)
@@ -104,6 +121,17 @@ namespace Protogen.Models.Generators.Csharp
                     return "timestamptz";
             }
             return null;
+        }
+
+        private void RenderInverseProperty(ModelField field)
+        {
+            if (field.ResolvedInverseName != null)
+            {
+                var accessorName = field.AccessorName.Pascalize()
+                                        .Replace(field.ForeignKey.RefersTo.Model.Name.Pascalize(), _model.Name.Pascalize());
+                _generator.AppendLine($"[InverseProperty(nameof({field.AccessorName.Pascalize()}))]")
+                          .AppendLine($"public virtual ICollection<{field.Model.Name.Pascalize()}> {field.ResolvedInverseName} {{ get; set; }}");
+            }
         }
     }
 }
