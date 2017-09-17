@@ -57,10 +57,7 @@ namespace Protogen.Models.Generators.Csharp
                     RenderForeignKey(field);
                 }
             }
-            foreach (var field in _model.Project.AllModels
-                                        .SelectMany(m => m.AllFields)
-                                        .Where(f => f.ForeignKey != null 
-                                                    && f.ForeignKey.RefersTo.Model == _model))
+            foreach (var field in _model.ReferencingFields)
             {
                 RenderInverseProperty(field);
             }

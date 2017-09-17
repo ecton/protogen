@@ -71,7 +71,7 @@ namespace Protogen.Models.Generators.Csharp
                     cType = "Guid";
                     break;
                 case FieldType.Model:
-                    cType = type.Model.Name; // TODO: For this to work for both schemas and EF, we need to be able to add a suffix
+                    cType = type.Model.Name.Pascalize(); // TODO: For this to work for both schemas and EF, we need to be able to add a suffix
                     inherentlyNullable = true;
                     break;
                 case FieldType.Auto:

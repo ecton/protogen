@@ -66,5 +66,16 @@ namespace Protogen.Models
                 field.ResolveAutoTypes();
             }
         }
+
+        public IEnumerable<ModelField> ReferencingFields
+        {
+            get
+            {
+                return Project.AllModels
+                              .SelectMany(m => m.AllFields)
+                              .Where(f => f.ForeignKey != null
+                                       && f.ForeignKey.RefersTo.Model == this);
+            }
+        }
     }
 }

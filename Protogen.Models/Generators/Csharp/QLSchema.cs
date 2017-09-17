@@ -19,6 +19,7 @@ namespace Protogen.Models.Generators.Csharp
         {
             RenderUsingStatements();
             BeginClass();
+            RenderContextClass();
             RenderConstructor();
             EndClass();
             return _generator.ToString();
@@ -29,6 +30,7 @@ namespace Protogen.Models.Generators.Csharp
             _generator.AppendLine("using System;")
                       .AppendLine("using GraphQL;")
                       .AppendLine("using GraphQL.Types;")
+                      .AppendLine($"using {_project.Namespace ?? _project.Name}.Models;")
                       .AppendLine();
         }
 
@@ -61,6 +63,14 @@ namespace Protogen.Models.Generators.Csharp
             }
 
             _generator.EndBlock();
+        }
+
+        private void RenderContextClass()
+        {
+            _generator.AppendLine($"public class Context")
+                      .BeginBlock()
+                      .AppendLine($"public {_project.Name.Pascalize()}DbContext Database {{ get; set; }}")
+                      .EndBlock();
         }
     }
 }

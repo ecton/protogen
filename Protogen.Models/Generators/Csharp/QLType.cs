@@ -14,7 +14,6 @@ namespace Protogen.Models.Generators.Csharp
             _model = model;
         }
 
-
         public string Generate()
         {
             RenderUsingStatements();
@@ -29,7 +28,7 @@ namespace Protogen.Models.Generators.Csharp
             _generator.AppendLine("using System;")
                       .AppendLine("using GraphQL;")
                       .AppendLine("using GraphQL.Types;")
-                      .AppendLine($"using {_model.Project.Namespace ?? _model.Project.Name}.GraphQL;")
+                      .AppendLine($"using {_model.Project.Namespace ?? _model.Project.Name}.Models;")
                       .AppendLine();
         }
 
@@ -49,24 +48,28 @@ namespace Protogen.Models.Generators.Csharp
 
         private void RenderConstructor()
         {
-            _generator.AppendLine($"public {_model.Project.Name.Pascalize()}Type()")
+            _generator.AppendLine($"public {_model.Name.Pascalize()}Type()")
                       .BeginBlock();
 
             foreach (var field in _model.AllFields)
             {
                 if (field.PrimaryKey && _model.HasSimplePrimaryKey)
                 {
-                    _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()})");
+                    _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()});");
                 }
                 else
                 {
                     if (field.ForeignKey != null)
                     {
-                        _generator.AppendLine($"Field(\"{field.AccessorName.Camelize()}\", x => x.{field.AccessorName.Pascalize()}, nullable: {field.Null.ToString().ToLower()}).Description(@\"{field.Description}\");");
+                        _generator.AppendLine($"Field<{field.ForeignKey.RefersTo.Model.Name.Pascalize()}>(\"{field.AccessorName.Camelize()}\", @\"{field.Description}\", resolve: ctx => ")
+                                  .BeginBlock()
+                                  .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx;")
+                                  .AppendLine($"return schemaContext.Database.{field.ForeignKey.RefersTo.Model.Name.Pascalize().Pluralize()}.Where(x => x.{field.ForeignKey.RefersTo.Name.Pascalize()} == ctx.Source.{field.Name.Pascalize()}).FirstOrDefault();")
+                                  .EndBlock("});");
                     }
                     else
                     {
-                        _generator.AppendLine($"Field(\"{field.Name.Camelize()}\", x => x.{field.Name.Pascalize()}, nullable: {field.Null.ToString().ToLower()}).Description(@\"{field.Description}\");");
+                        _generator.AppendLine($"Field<{CsharpGenerator.Type(field.ResolvedType, field.Null)}>(\"{field.Name.Camelize()}\", @\"{field.Description}\", resolve: ctx => ctx.Source.{field.Name.Pascalize()});");
                     }
                 }
             }
