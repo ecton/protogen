@@ -9,9 +9,9 @@ namespace SimpleExample.GraphQL
     {
         public SimpleExampleType()
         {
-            Field("id", x => x.Id, nullable: false).Description(@"");
-            Field("completed_at", x => x.CompletedAt, nullable: true).Description(@"");
-            Field("parent_id", x => x.ParentId, nullable: true).Description(@"");
+            Id(x => x.Id)
+            Field("completedAt", x => x.CompletedAt, nullable: true).Description(@"");
+            Field("parent", x => x.Parent, nullable: true).Description(@"");
             Field("priority", x => x.Priority, nullable: false).Description(@"");
             Field("task", x => x.Task, nullable: false).Description(@"");
         }

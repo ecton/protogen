@@ -54,7 +54,21 @@ namespace Protogen.Models.Generators.Csharp
 
             foreach (var field in _model.AllFields)
             {
-                _generator.AppendLine($"Field(\"{field.Name.Underscore()}\", x => x.{field.Name.Pascalize()}, nullable: {field.Null.ToString().ToLower()}).Description(@\"{field.Description}\");");
+                if (field.PrimaryKey && _model.HasSimplePrimaryKey)
+                {
+                    _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()})");
+                }
+                else
+                {
+                    if (field.ForeignKey != null)
+                    {
+                        _generator.AppendLine($"Field(\"{field.AccessorName.Camelize()}\", x => x.{field.AccessorName.Pascalize()}, nullable: {field.Null.ToString().ToLower()}).Description(@\"{field.Description}\");");
+                    }
+                    else
+                    {
+                        _generator.AppendLine($"Field(\"{field.Name.Camelize()}\", x => x.{field.Name.Pascalize()}, nullable: {field.Null.ToString().ToLower()}).Description(@\"{field.Description}\");");
+                    }
+                }
             }
 
             _generator.EndBlock();
