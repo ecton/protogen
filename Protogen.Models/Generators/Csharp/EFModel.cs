@@ -78,7 +78,7 @@ namespace Protogen.Models.Generators.Csharp
 
         private void RenderKeyAttribute(ModelField field)
         {
-            if (field.PrimaryKey)
+            if (field.PrimaryKey && field.Model.HasSimplePrimaryKey)
             {
                 _generator.AppendLine("[Key]");
             }

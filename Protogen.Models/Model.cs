@@ -25,11 +25,12 @@ namespace Protogen.Models
         private List<ModelField> _fields = new List<ModelField>();
         public IEnumerable<ModelField> AllFields { get => _fields.OrderBy(f => !f.PrimaryKey).ThenBy(f => f.Name); }
 
-        public bool HasSimplePrimaryKey { get => _fields.Where(f => f.PrimaryKey).Count() == 1; }
+        public IEnumerable<ModelField> PrimaryKeys { get => AllFields.Where(f => f.PrimaryKey); }
+        public bool HasSimplePrimaryKey { get => PrimaryKeys.Count() == 1; }
 
         public void Preprocess()
         {
-            foreach (var field in _fields)
+            foreach (var field in AllFields)
             {
                 field.Model = this;
                 field.Preprocess();
@@ -51,7 +52,7 @@ namespace Protogen.Models
         }
         public void ResolveAutoTypes()
         {
-            foreach (var field in _fields)
+            foreach (var field in AllFields)
             {
                 field.ResolveAutoTypes();
             }

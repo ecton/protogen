@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Humanizer;
 
 namespace Protogen.Models.Generators.Csharp
@@ -64,10 +64,21 @@ namespace Protogen.Models.Generators.Csharp
 
             foreach (var model in _project.AllModels)
             {
+                if (!model.HasSimplePrimaryKey)
+                {
+                    RenderCompoundPrimaryKey(model);
+                }
             }
 
             _generator.AppendLine("base.OnModelCreating(modelBuilder);")
                       .EndBlock();
+        }
+
+        private void RenderCompoundPrimaryKey(Model model)
+        {
+            // builder.Entity<MyTable>().HasKey(table => new { table.Id, table.Name });
+            _generator.Append($"modelBuilder.Entity<{model.Name.Pascalize()}>")
+                  .AppendLine($".HasKey(t => new {{ {string.Join(", ", model.PrimaryKeys.Select(f => $"t.{f.Name.Pascalize()}"))} }});");
         }
     }
 }

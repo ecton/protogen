@@ -51,6 +51,8 @@ namespace Protogen.Models.Generators.Csharp
             _generator.AppendLine($"public {_model.Name.Pascalize()}Type()")
                       .BeginBlock();
 
+            if (!_model.HasSimplePrimaryKey) RenderCompoundIdField();
+
             foreach (var field in _model.AllFields)
             {
                 if (field.PrimaryKey && _model.HasSimplePrimaryKey)
@@ -81,6 +83,11 @@ namespace Protogen.Models.Generators.Csharp
         private void RenderSimpleIdField(ModelField field)
         {
             _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()});");
+        }
+
+        private void RenderCompoundIdField()
+        {
+            _generator.AppendLine($"Id(x => $\"{{{string.Join("}::{", _model.PrimaryKeys.Select(f => $"x.{f.Name.Pascalize()}"))}}}\");");
         }
 
         private void RenderForeignKey(ModelField field)
@@ -125,13 +132,6 @@ namespace Protogen.Models.Generators.Csharp
         {
             if (field.ResolvedInverseName != null)
             {
-                var accessorName = field.AccessorName.Pascalize()
-                                        .Replace(field.ForeignKey.RefersTo.Model.Name.Pascalize(), _model.Name.Pascalize());
-                /*
-    Connection<DroidType>()
-      .Name("friends")
-      .Resolve(context =>
-        Connection.ToConnection(c.Source.Friends, context));*/
                 _generator.AppendLine($"Connection<ListGraphType<{field.ForeignKey.RefersTo.Model.Name.Pascalize()}Type>>()")
                           .IncreaseIndentation()
                           .AppendLine($".Name(\"{field.ResolvedInverseName.Underscore()}\")")

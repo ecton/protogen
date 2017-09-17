@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cases\CompoundKey\Outputs\GraphQL\CompoundKeyQueryBase.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\GraphQL\CompoundKeySchema.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\GraphQL\ProductType.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\GraphQL\StoreProductType.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\GraphQL\StoreType.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\Models\CompoundKeyDbContext.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\Models\Product.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\Models\Store.cs" />
+    <Compile Remove="Cases\CompoundKey\Outputs\Models\StoreProduct.cs" />
     <Compile Remove="Cases\SimpleExample\Outputs\GraphQL\SimpleExampleQueryBase.cs" />
     <Compile Remove="Cases\SimpleExample\Outputs\GraphQL\SimpleExampleSchema.cs" />
     <Compile Remove="Cases\SimpleExample\Outputs\GraphQL\TodoType.cs" />
@@ -19,6 +28,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Cases\CompoundKey\Outputs\GraphQL\CompoundKeyQueryBase.cs" />
+    <None Include="Cases\CompoundKey\Outputs\GraphQL\CompoundKeySchema.cs" />
+    <None Include="Cases\CompoundKey\Outputs\GraphQL\ProductType.cs" />
+    <None Include="Cases\CompoundKey\Outputs\GraphQL\StoreProductType.cs" />
+    <None Include="Cases\CompoundKey\Outputs\GraphQL\StoreType.cs" />
+    <None Include="Cases\CompoundKey\Outputs\Models\CompoundKeyDbContext.cs" />
+    <None Include="Cases\CompoundKey\Outputs\Models\Product.cs" />
+    <None Include="Cases\CompoundKey\Outputs\Models\Store.cs" />
+    <None Include="Cases\CompoundKey\Outputs\Models\StoreProduct.cs" />
     <None Include="Cases\SimpleExample\Outputs\GraphQL\TodoType.cs" />
     <None Include="Cases\SimpleExample\Outputs\Models\SimpleExampleDbContext.cs" />
     <None Include="Cases\SimpleExample\Outputs\GraphQL\SimpleExampleQueryBase.cs" />

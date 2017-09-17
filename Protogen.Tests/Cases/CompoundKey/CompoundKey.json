@@ -1,0 +1,8 @@
+﻿{
+  "name": "CompoundKey",
+  "models": [
+    "Product",
+    "Store",
+    "StoreProduct"
+  ]
+}

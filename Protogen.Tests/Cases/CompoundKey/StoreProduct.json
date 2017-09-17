@@ -1,0 +1,32 @@
+﻿{
+  "fields": {
+    "productId": {
+      "primaryKey": true,
+      "foreignKey": "product.id"
+    },
+    "storeId": {
+      "primaryKey": true,
+      "foreignKey": "store.id"
+    },
+    "price": "double"
+  },
+  "queries": [
+    {
+      "name": "allStoreProducts",
+      "arguments": [
+        {
+          "name": "offset",
+          "default": 0,
+          "description": "The offset to start the query at",
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "default": 50,
+          "description": "The number of rows to return",
+          "type": "integer"
+        }
+      ]
+    }
+  ]
+}
