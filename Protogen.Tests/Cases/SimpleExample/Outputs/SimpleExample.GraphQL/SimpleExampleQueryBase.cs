@@ -8,18 +8,18 @@ namespace SimpleExample.GraphQL
     {
         public SimpleExampleQueryBase()
         {
-            Field<Todo>(
+            Field<TodoType>(
                 "allTodos",
                 resolve: ResolveAllTodos,
                 description: @"",
                 arguments: new QueryArguments(
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "offset",
                         DefaultValue = 0,
                         Description = @"The offset to start the query at"
                     },
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "limit",
                         DefaultValue = 50,

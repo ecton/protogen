@@ -57,7 +57,7 @@ namespace Protogen.Models.Generators.Csharp
             
             foreach (var field in _fields)
             {
-                _generator.AppendLine($"Field<{CsharpGenerator.Type(field.ResolvedType, false)}>(")
+                _generator.AppendLine($"Field<{CsharpGenerator.Type(field.ResolvedType, false)}Type>(")
                           .IncreaseIndentation()
                           .AppendLine($"\"{field.Name.Camelize()}\",")
                           .AppendLine($"resolve: Resolve{field.Name.Pascalize()},");
@@ -92,7 +92,7 @@ namespace Protogen.Models.Generators.Csharp
 
         private void RenderArgument(QLField arg, bool isLast)
         {
-            _generator.AppendLine($"new QueryArgument<{CsharpGenerator.Type(arg.ResolvedType, false)}>")
+            _generator.AppendLine($"new QueryArgument(typeof({CsharpGenerator.Type(arg.ResolvedType, false)}).GetGraphTypeFromType({(arg.Default != null).ToString().ToLower()}))")
                       .BeginBlock()
                       .AppendLine($"Name = \"{arg.Name.Camelize()}\",")
                       .AppendLine($"DefaultValue = {arg.Default},")

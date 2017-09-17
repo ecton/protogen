@@ -26,6 +26,7 @@ namespace Protogen.Models.Generators.Csharp
         private void RenderUsingStatements()
         {
             _generator.AppendLine("using System;")
+                      .AppendLine("using System.Linq;")
                       .AppendLine("using GraphQL;")
                       .AppendLine("using GraphQL.Types;")
                       .AppendLine($"using {_model.Project.Namespace ?? _model.Project.Name}.Models;")
@@ -55,20 +56,13 @@ namespace Protogen.Models.Generators.Csharp
 
             foreach (var field in _model.AllFields)
             {
-                if (field.PrimaryKey && _model.HasSimplePrimaryKey)
+                if (field.ForeignKey != null)
                 {
-                    RenderSimpleIdField(field);
+                    RenderForeignKey(field);
                 }
                 else
                 {
-                    if (field.ForeignKey != null)
-                    {
-                        RenderForeignKey(field);
-                    }
-                    else
-                    {
-                        RenderSimpleField(field);
-                    }
+                    RenderSimpleField(field);
                 }
             }
 
@@ -80,21 +74,20 @@ namespace Protogen.Models.Generators.Csharp
             _generator.EndBlock();
         }
 
-        private void RenderSimpleIdField(ModelField field)
-        {
-            _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()});");
-        }
-
         private void RenderCompoundIdField()
         {
-            _generator.AppendLine($"Id(x => $\"{{{string.Join("}::{", _model.PrimaryKeys.Select(f => $"x.{f.Name.Pascalize()}"))}}}\");");
+            _generator.AppendLine($"Field<StringGraphType>(")
+                      .IncreaseIndentation()
+                      .AppendLine($"\"id\",")
+                      .AppendLine($"@\"\",")
+                      .AppendLine($"resolve: ctx => $\"{{{string.Join("}::{", _model.PrimaryKeys.Select(f => $"ctx.Source.{f.Name.Pascalize()}"))}}}\");");
         }
 
         private void RenderForeignKey(ModelField field)
         {
             _generator.AppendLine($"Field<{field.ForeignKey.RefersTo.Model.Name.Pascalize()}Type>(\"{field.AccessorName.Camelize()}\", @\"{field.Description}\", resolve: ctx => ")
                       .BeginBlock()
-                      .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx;")
+                      .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx.UserContext;")
                       .AppendLine($"return schemaContext.Database.{field.ForeignKey.RefersTo.Model.Name.Pascalize().Pluralize()}.Where(x => x.{field.ForeignKey.RefersTo.Name.Pascalize()} == ctx.Source.{field.Name.Pascalize()}).FirstOrDefault();")
                       .EndBlock("});");
         }
@@ -107,7 +100,7 @@ namespace Protogen.Models.Generators.Csharp
                       .AppendLine($"\"{field.Name.Camelize()}\",")
                       .AppendLine($"@\"{field.Description}\",");
 
-            if (field.ResolvedType.FieldType == FieldType.Date || field.ResolvedType.FieldType == FieldType.DateTime)
+            if (field.ResolvedType.FieldType == FieldType.DateTime)
             {
                 _generator.Append($"resolve: ctx => ctx.Source.{field.Name.Pascalize()}");
                 if (field.Null)
@@ -137,7 +130,7 @@ namespace Protogen.Models.Generators.Csharp
                           .AppendLine($".Name(\"{field.ResolvedInverseName.Underscore()}\")")
                           .AppendLine($".Resolve(ctx => ")
                           .BeginBlock()
-                          .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx;")
+                          .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx.UserContext;")
                           .AppendLine($"return schemaContext.Database.{field.Model.Name.Pascalize().Pluralize()}.Where(x => x.{field.Name.Pascalize()} == ctx.Source.{field.ForeignKey.RefersTo.Name.Pascalize()});")
                           .EndBlock("});")
                           .DecreaseIndentation();

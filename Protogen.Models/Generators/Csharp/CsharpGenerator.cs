@@ -10,22 +10,22 @@ namespace Protogen.Models.Generators.Csharp
         public override Dictionary<string, string> Generate(Project project)
         {
             var results = new Dictionary<string, string>();
-            results[$"Models/{project.Name.Pascalize()}DbContext.cs"] = new EFDbContext(project).Generate();
+            results[$"{project.Name.Pascalize()}.Models/{project.Name.Pascalize()}DbContext.cs"] = new EFDbContext(project).Generate();
             foreach (var model in project.AllModels)
             {
-                results[$"Models/{model.Name.Pascalize()}.cs"] = new EFModel(model).Generate();
+                results[$"{project.Name.Pascalize()}.Models/{model.Name.Pascalize()}.cs"] = new EFModel(model).Generate();
             }
 
             if (project.AllQueries.Any() || project.AllMutations.Any())
             {
-                results[$"GraphQL/{project.Name.Pascalize()}Schema.cs"] = new QLSchema(project).Generate();
+                results[$"{project.Name.Pascalize()}.GraphQL/{project.Name.Pascalize()}Schema.cs"] = new QLSchema(project).Generate();
                 if (project.AllQueries.Any())
                 {
-                    results[$"GraphQL/{project.Name.Pascalize()}QueryBase.cs"] = new QLFieldsClass(project, "Query", project.AllQueries).Generate();
+                    results[$"{project.Name.Pascalize()}.GraphQL/{project.Name.Pascalize()}QueryBase.cs"] = new QLFieldsClass(project, "Query", project.AllQueries).Generate();
                 }
                 foreach (var model in project.AllModels)
                 {
-                    results[$"GraphQL/{model.Name.Pascalize()}Type.cs"] = new QLType(model).Generate();
+                    results[$"{project.Name.Pascalize()}.GraphQL/{model.Name.Pascalize()}Type.cs"] = new QLType(model).Generate();
                 }
             }
 

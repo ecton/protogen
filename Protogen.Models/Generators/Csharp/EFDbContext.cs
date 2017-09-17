@@ -76,8 +76,7 @@ namespace Protogen.Models.Generators.Csharp
 
         private void RenderCompoundPrimaryKey(Model model)
         {
-            // builder.Entity<MyTable>().HasKey(table => new { table.Id, table.Name });
-            _generator.Append($"modelBuilder.Entity<{model.Name.Pascalize()}>")
+            _generator.Append($"modelBuilder.Entity<{model.Name.Pascalize()}>()")
                   .AppendLine($".HasKey(t => new {{ {string.Join(", ", model.PrimaryKeys.Select(f => $"t.{f.Name.Pascalize()}"))} }});");
         }
     }

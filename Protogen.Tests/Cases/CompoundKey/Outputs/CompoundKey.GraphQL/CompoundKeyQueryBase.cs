@@ -8,18 +8,18 @@ namespace CompoundKey.GraphQL
     {
         public CompoundKeyQueryBase()
         {
-            Field<Product>(
+            Field<ProductType>(
                 "allProducts",
                 resolve: ResolveAllProducts,
                 description: @"",
                 arguments: new QueryArguments(
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "offset",
                         DefaultValue = 0,
                         Description = @"The offset to start the query at"
                     },
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "limit",
                         DefaultValue = 50,
@@ -27,18 +27,18 @@ namespace CompoundKey.GraphQL
                     }
                 )
             );
-            Field<Store>(
+            Field<StoreType>(
                 "allStores",
                 resolve: ResolveAllStores,
                 description: @"",
                 arguments: new QueryArguments(
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "offset",
                         DefaultValue = 0,
                         Description = @"The offset to start the query at"
                     },
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "limit",
                         DefaultValue = 50,
@@ -46,18 +46,18 @@ namespace CompoundKey.GraphQL
                     }
                 )
             );
-            Field<StoreProduct>(
+            Field<StoreProductType>(
                 "allStoreProducts",
                 resolve: ResolveAllStoreProducts,
                 description: @"",
                 arguments: new QueryArguments(
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "offset",
                         DefaultValue = 0,
                         Description = @"The offset to start the query at"
                     },
-                    new QueryArgument<int>
+                    new QueryArgument(typeof(int).GetGraphTypeFromType(true))
                     {
                         Name = "limit",
                         DefaultValue = 50,

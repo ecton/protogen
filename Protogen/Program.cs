@@ -40,6 +40,14 @@ namespace Protogen
             {
                 args.AddRange(FindAllTestCases());
             }
+            else if (!_projectFile.HasValue())
+            {
+                args.Add(new GenerateArguments()
+                {
+                    Project = Path.Combine(Directory.GetCurrentDirectory(), "Protogen", "Protogen.json"),
+                    Output = Directory.GetParent(Directory.GetCurrentDirectory()).FullName
+                });
+            }
             if (_projectFile.HasValue())
             {
                 args.Add(new GenerateArguments

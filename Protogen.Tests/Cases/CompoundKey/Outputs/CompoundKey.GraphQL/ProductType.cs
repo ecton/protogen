@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using GraphQL;
 using GraphQL.Types;
 using CompoundKey.Models;
@@ -9,7 +10,12 @@ namespace CompoundKey.GraphQL
     {
         public ProductType()
         {
-            Id(x => x.Id);
+            Field(
+                typeof(long).GetGraphTypeFromType(false),
+                "id",
+                @"",
+                resolve: ctx => ctx.Source.Id
+            );
             Field(
                 typeof(double).GetGraphTypeFromType(false),
                 "msrp",

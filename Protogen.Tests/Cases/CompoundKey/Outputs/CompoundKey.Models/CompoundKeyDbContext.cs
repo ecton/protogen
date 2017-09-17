@@ -13,7 +13,7 @@ namespace CompoundKey.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<StoreProduct>.HasKey(t => new { t.ProductId, t.StoreId });
+            modelBuilder.Entity<StoreProduct>().HasKey(t => new { t.ProductId, t.StoreId });
             base.OnModelCreating(modelBuilder);
         }
     }

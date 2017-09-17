@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using GraphQL;
 using GraphQL.Types;
 using SimpleExample.Models;
@@ -9,7 +10,12 @@ namespace SimpleExample.GraphQL
     {
         public TodoType()
         {
-            Id(x => x.Id);
+            Field(
+                typeof(long).GetGraphTypeFromType(false),
+                "id",
+                @"",
+                resolve: ctx => ctx.Source.Id
+            );
             Field(
                 typeof(DateTimeOffset).GetGraphTypeFromType(true),
                 "completedAt",
@@ -18,7 +24,7 @@ namespace SimpleExample.GraphQL
             );
             Field<TodoType>("parent", @"", resolve: ctx => 
             {
-                var schemaContext = (SimpleExampleSchema.Context)ctx;
+                var schemaContext = (SimpleExampleSchema.Context)ctx.UserContext;
                 return schemaContext.Database.Todos.Where(x => x.Id == ctx.Source.ParentId).FirstOrDefault();
             });
             Field(
@@ -37,7 +43,7 @@ namespace SimpleExample.GraphQL
                 .Name("children")
                 .Resolve(ctx => 
                 {
-                    var schemaContext = (SimpleExampleSchema.Context)ctx;
+                    var schemaContext = (SimpleExampleSchema.Context)ctx.UserContext;
                     return schemaContext.Database.Todos.Where(x => x.ParentId == ctx.Source.Id);
                 });
         }
