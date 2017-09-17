@@ -10,14 +10,36 @@ namespace SimpleExample.GraphQL
         public TodoType()
         {
             Id(x => x.Id);
-            Field<DateTimeOffset?>("completedAt", @"", resolve: ctx => ctx.Source.CompletedAt);
-            Field<Todo>("parent", @"", resolve: ctx => 
+            Field(
+                typeof(DateTimeOffset).GetGraphTypeFromType(true),
+                "completedAt",
+                @"",
+                resolve: ctx => ctx.Source.CompletedAt?.UtcDateTime
+            );
+            Field<TodoType>("parent", @"", resolve: ctx => 
             {
                 var schemaContext = (SimpleExampleSchema.Context)ctx;
                 return schemaContext.Database.Todos.Where(x => x.Id == ctx.Source.ParentId).FirstOrDefault();
             });
-            Field<bool>("priority", @"", resolve: ctx => ctx.Source.Priority);
-            Field<string>("task", @"", resolve: ctx => ctx.Source.Task);
+            Field(
+                typeof(bool).GetGraphTypeFromType(false),
+                "priority",
+                @"",
+                resolve: ctx => ctx.Source.Priority
+            );
+            Field(
+                typeof(string).GetGraphTypeFromType(false),
+                "task",
+                @"",
+                resolve: ctx => ctx.Source.Task
+            );
+            Connection<ListGraphType<TodoType>>()
+                .Name("children")
+                .Resolve(ctx => 
+                {
+                    var schemaContext = (SimpleExampleSchema.Context)ctx;
+                    return schemaContext.Database.Todos.Where(x => x.ParentId == ctx.Source.Id);
+                });
         }
     }
 }

@@ -55,26 +55,93 @@ namespace Protogen.Models.Generators.Csharp
             {
                 if (field.PrimaryKey && _model.HasSimplePrimaryKey)
                 {
-                    _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()});");
+                    RenderSimpleIdField(field);
                 }
                 else
                 {
                     if (field.ForeignKey != null)
                     {
-                        _generator.AppendLine($"Field<{field.ForeignKey.RefersTo.Model.Name.Pascalize()}>(\"{field.AccessorName.Camelize()}\", @\"{field.Description}\", resolve: ctx => ")
-                                  .BeginBlock()
-                                  .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx;")
-                                  .AppendLine($"return schemaContext.Database.{field.ForeignKey.RefersTo.Model.Name.Pascalize().Pluralize()}.Where(x => x.{field.ForeignKey.RefersTo.Name.Pascalize()} == ctx.Source.{field.Name.Pascalize()}).FirstOrDefault();")
-                                  .EndBlock("});");
+                        RenderForeignKey(field);
                     }
                     else
                     {
-                        _generator.AppendLine($"Field<{CsharpGenerator.Type(field.ResolvedType, field.Null)}>(\"{field.Name.Camelize()}\", @\"{field.Description}\", resolve: ctx => ctx.Source.{field.Name.Pascalize()});");
+                        RenderSimpleField(field);
                     }
                 }
             }
 
+            foreach (var field in _model.ReferencingFields)
+            {
+                RenderInverseField(field);
+            }
+
             _generator.EndBlock();
+        }
+
+        private void RenderSimpleIdField(ModelField field)
+        {
+            _generator.AppendLine($"Id(x => x.{field.Name.Pascalize()});");
+        }
+
+        private void RenderForeignKey(ModelField field)
+        {
+            _generator.AppendLine($"Field<{field.ForeignKey.RefersTo.Model.Name.Pascalize()}Type>(\"{field.AccessorName.Camelize()}\", @\"{field.Description}\", resolve: ctx => ")
+                      .BeginBlock()
+                      .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx;")
+                      .AppendLine($"return schemaContext.Database.{field.ForeignKey.RefersTo.Model.Name.Pascalize().Pluralize()}.Where(x => x.{field.ForeignKey.RefersTo.Name.Pascalize()} == ctx.Source.{field.Name.Pascalize()}).FirstOrDefault();")
+                      .EndBlock("});");
+        }
+
+        private void RenderSimpleField(ModelField field)
+        {
+            _generator.AppendLine($"Field(")
+                      .IncreaseIndentation()
+                      .AppendLine($"typeof({CsharpGenerator.Type(field.ResolvedType, false)}).GetGraphTypeFromType({field.Null.ToString().ToLower()}),")
+                      .AppendLine($"\"{field.Name.Camelize()}\",")
+                      .AppendLine($"@\"{field.Description}\",");
+
+            if (field.ResolvedType.FieldType == FieldType.Date || field.ResolvedType.FieldType == FieldType.DateTime)
+            {
+                _generator.Append($"resolve: ctx => ctx.Source.{field.Name.Pascalize()}");
+                if (field.Null)
+                {
+                    _generator.Append("?.");
+                }
+                else
+                {
+                    _generator.Append(".");
+                }
+                _generator.AppendLine("UtcDateTime");
+            }
+            else
+            {
+                _generator.AppendLine($"resolve: ctx => ctx.Source.{field.Name.Pascalize()}");
+            }
+            _generator.DecreaseIndentation()
+                      .AppendLine(");");
+        }
+
+        private void RenderInverseField(ModelField field)
+        {
+            if (field.ResolvedInverseName != null)
+            {
+                var accessorName = field.AccessorName.Pascalize()
+                                        .Replace(field.ForeignKey.RefersTo.Model.Name.Pascalize(), _model.Name.Pascalize());
+                /*
+    Connection<DroidType>()
+      .Name("friends")
+      .Resolve(context =>
+        Connection.ToConnection(c.Source.Friends, context));*/
+                _generator.AppendLine($"Connection<ListGraphType<{field.ForeignKey.RefersTo.Model.Name.Pascalize()}Type>>()")
+                          .IncreaseIndentation()
+                          .AppendLine($".Name(\"{field.ResolvedInverseName.Underscore()}\")")
+                          .AppendLine($".Resolve(ctx => ")
+                          .BeginBlock()
+                          .AppendLine($"var schemaContext = ({_model.Project.Name.Pascalize()}Schema.Context)ctx;")
+                          .AppendLine($"return schemaContext.Database.{field.Model.Name.Pascalize().Pluralize()}.Where(x => x.{field.Name.Pascalize()} == ctx.Source.{field.ForeignKey.RefersTo.Name.Pascalize()});")
+                          .EndBlock("});")
+                          .DecreaseIndentation();
+            }
         }
     }
 }
