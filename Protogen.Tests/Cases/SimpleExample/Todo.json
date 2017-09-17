@@ -8,9 +8,13 @@
       "foreignKey": "todo.id",
       "null":  true
     },
-    "complete": {
+    "completedAt": {
+      "type": "dateTime",
+      "default": false,
+      "null": true
+    },
+    "priority": {
       "type": "boolean",
-      "null": false,
       "default": false
     }
   },

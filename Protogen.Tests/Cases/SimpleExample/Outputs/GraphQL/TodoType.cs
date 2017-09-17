@@ -9,10 +9,11 @@ namespace SimpleExample.GraphQL
     {
         public SimpleExampleType()
         {
-            Field("id", x => x.Id, nullable: False).Description(@"");
-            Field("complete", x => x.Complete, nullable: False).Description(@"");
-            Field("parent_id", x => x.ParentId, nullable: True).Description(@"");
-            Field("task", x => x.Task, nullable: False).Description(@"");
+            Field("id", x => x.Id, nullable: false).Description(@"");
+            Field("completed_at", x => x.CompletedAt, nullable: true).Description(@"");
+            Field("parent_id", x => x.ParentId, nullable: true).Description(@"");
+            Field("priority", x => x.Priority, nullable: false).Description(@"");
+            Field("task", x => x.Task, nullable: false).Description(@"");
         }
     }
 }

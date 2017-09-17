@@ -29,7 +29,6 @@ namespace Protogen.Models.Generators.Csharp
                       .AppendLine("using System.Collections.Generic;")
                       .AppendLine("using System.ComponentModel.DataAnnotations;")
                       .AppendLine("using System.ComponentModel.DataAnnotations.Schema;")
-                      .AppendLine("using NpgsqlTypes;")
                       .AppendLine();
         }
 
@@ -117,8 +116,8 @@ namespace Protogen.Models.Generators.Csharp
         {
             switch (field.ResolvedType.FieldType)
             {
-                case FieldType.DateTime:
-                    return "timestamptz";
+                case FieldType.Date:
+                    return "date";
             }
             return null;
         }

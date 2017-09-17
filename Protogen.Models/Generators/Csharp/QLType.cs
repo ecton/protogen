@@ -54,7 +54,7 @@ namespace Protogen.Models.Generators.Csharp
 
             foreach (var field in _model.AllFields)
             {
-                _generator.AppendLine($"Field(\"{field.Name.Underscore()}\", x => x.{field.Name.Pascalize()}, nullable: {field.Null}).Description(@\"{field.Description}\");");
+                _generator.AppendLine($"Field(\"{field.Name.Underscore()}\", x => x.{field.Name.Pascalize()}, nullable: {field.Null.ToString().ToLower()}).Description(@\"{field.Description}\");");
             }
 
             _generator.EndBlock();

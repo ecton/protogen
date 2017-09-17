@@ -59,13 +59,13 @@ namespace Protogen.Models.Generators.Csharp
                     cType = "double";
                     break;
                 case FieldType.Date:
-                    cType = "NpgsqlDate";
+                    cType = "DateTime";
                     break;
                 case FieldType.DateTime:
-                    cType = "NpgsqlDateTime";
+                    cType = "DateTimeOffset";
                     break;
                 case FieldType.Time:
-                    cType = "NpgsqlDateTime";
+                    cType = "TimeSpan";
                     break;
                 case FieldType.Guid:
                     cType = "Guid";
