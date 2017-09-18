@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace CompoundKey.Models
 {
-    public class CompoundKeyDbContext : DbContext
+    public class CompoundKeyDbContext : OverrideSuperclass
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Store> Stores { get; set; }

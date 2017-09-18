@@ -1,5 +1,8 @@
 ﻿{
   "name": "CompoundKey",
+  "settings": {
+    "dbContextSuperclass":  "OverrideSuperclass"
+  },
   "models": [
     "Product",
     "Store",

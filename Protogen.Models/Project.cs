@@ -13,6 +13,7 @@ namespace Protogen.Models
         public string Path { get; }
         public string Name { get; set; }
         public string Namespace { get; set; }
+        public Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
         public string[] Models
         {
             set
@@ -73,6 +74,13 @@ namespace Protogen.Models
         public IEnumerable<QLField> AllMutations
         {
             get => _models.SelectMany(m => m.Mutations ?? Enumerable.Empty<QLField>());
+        }
+
+        public string Setting(string key, string defaultValue = null)
+        {
+            string value;
+            if (Settings.TryGetValue(key, out value)) return value;
+            return defaultValue;
         }
     }
 }
