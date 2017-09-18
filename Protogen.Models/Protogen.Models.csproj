@@ -3,7 +3,7 @@
   <PropertyGroup>
       <TargetFramework>netcoreapp2.0</TargetFramework>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <Version>0.1.0</Version>
+      <Version>0.1.2</Version>
       <Description>An opinionated tool for taking simple schema definitions in JSON and generating models in various languages, a C# EntityFramework.Core code-first set of classes, and a C# GraphQL server-side implementation.</Description>
       <Copyright>2017 Jonathan Johnson</Copyright>
       <PackageLicenseUrl>https://gitlab.com/nil.object/protogen/blob/master/LICENSE</PackageLicenseUrl>
