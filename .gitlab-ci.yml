@@ -25,5 +25,5 @@ build:
   script:
     - dotnet build -c Release Protogen.Models
     - dotnet build -c Release Protogen
-    - dotnet nuget push Protogen.Models/bin/Release/netcoreapp2.0/Protogen.Models.*.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY
-    - dotnet nuget push Protogen/bin/Release/netcoreapp2.0/Protogen.Tools.*.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY
+    - dotnet nuget push `find Protogen.Models -name "*.nupkg"` -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY
+    - dotnet nuget push `find Protogen -name "*.nupkg"` -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY
