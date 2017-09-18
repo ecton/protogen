@@ -1,7 +1,6 @@
 stages:
   - test
   - build
-  - deploy
 
 test:
   stage: test
@@ -16,6 +15,10 @@ test:
 build:
   stage: build
   image: microsoft/dotnet:2.0-sdk
+
+  only:
+    - tags
+    - master
 
   before_script:
     - "sed -ri 's/([[:digit:]]+\\.[[:digit:]]+\\.[[:digit:]]+)<\\/Version>/'${CI_COMMIT_TAG:-\"\\\\1-build-${CI_JOB_ID}\"}'<\\/Version>/' Protogen/Protogen.csproj"
