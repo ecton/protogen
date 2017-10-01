@@ -50,16 +50,16 @@ namespace Protogen.Models.Generators.Csharp
 
         private void RenderConstructor()
         {
-            _generator.AppendLine($"public {_project.Name.Pascalize()}Schema(Func<Type, GraphType> resolveType) : base(resolveType)")
+            _generator.AppendLine($"public {_project.Name.Pascalize()}Schema()")
                       .BeginBlock();
             
             if (_project.AllQueries.Count() > 0) {
-                _generator.AppendLine($"Query = ({_project.Name.Pascalize()}Query)resolveType(typeof({_project.Name.Pascalize()}Query));");
+                _generator.AppendLine($"Query = new {_project.Name.Pascalize()}Query();");
             }
 
             if (_project.AllMutations.Count() > 0)
             {
-                _generator.AppendLine($"Mutation = ({_project.Name.Pascalize()}Mutation)resolveType(typeof({_project.Name.Pascalize()}Mutation));");
+                _generator.AppendLine($"Mutation = new {_project.Name.Pascalize()}Mutation();");
             }
 
             _generator.EndBlock();

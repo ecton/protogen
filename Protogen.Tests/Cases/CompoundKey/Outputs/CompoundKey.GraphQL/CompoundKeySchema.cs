@@ -11,9 +11,9 @@ namespace CompoundKey.GraphQL
         {
             public CompoundKeyDbContext Database { get; set; }
         }
-        public CompoundKeySchema(Func<Type, GraphType> resolveType) : base(resolveType)
+        public CompoundKeySchema()
         {
-            Query = (CompoundKeyQuery)resolveType(typeof(CompoundKeyQuery));
+            Query = new CompoundKeyQuery();
         }
     }
 }
