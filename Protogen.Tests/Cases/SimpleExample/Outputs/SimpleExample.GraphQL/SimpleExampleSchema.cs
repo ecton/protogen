@@ -11,9 +11,9 @@ namespace SimpleExample.GraphQL
         {
             public SimpleExampleDbContext Database { get; set; }
         }
-        public SimpleExampleSchema(Func<Type, GraphType> resolveType) : base(resolveType)
+        public SimpleExampleSchema()
         {
-            Query = (SimpleExampleQuery)resolveType(typeof(SimpleExampleQuery));
+            Query = new SimpleExampleQuery();
         }
     }
 }
