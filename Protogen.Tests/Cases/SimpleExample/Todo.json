@@ -1,12 +1,14 @@
 ﻿{
+  "description": "A task that can be marked as completed.",
   "fields": {
     "id": {
-      "primaryKey": true
+      "primaryKey": true,
+      "description":  "The unqiue ID of the task"
     },
     "task": "string",
     "parentId": {
       "foreignKey": "todo.id",
-      "null":  true
+      "null": true
     },
     "completedAt": {
       "type": "dateTime",

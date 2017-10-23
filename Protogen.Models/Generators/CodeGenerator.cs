@@ -19,10 +19,16 @@ namespace Protogen.Models.Generators
 
         private bool _isStartOfLine = true;
         private string _currentWhitespace = "";
-        private void AddWhitespaceToLineIfNeeded()
+        private void AddWhitespaceToLineIfNeeded(bool isCodeLine)
         {
             if (_isStartOfLine)
             {
+                if (_insertEmptyLineBeforeNextCodeLine && isCodeLine)
+                {
+                    _builder.AppendLine();
+                }
+                _insertEmptyLineBeforeNextCodeLine = false;
+
                 _isStartOfLine = false;
                 _builder.Append(_currentWhitespace);
             }
@@ -42,8 +48,7 @@ namespace Protogen.Models.Generators
 
         public CodeGenerator BeginBlock(string opener = null)
         {
-            AddWhitespaceToLineIfNeeded();
-            AppendLine(opener ?? _blockOpener);
+            AppendLine(opener ?? _blockOpener, false);
             IncreaseIndentation();
             return this;
         }
@@ -51,29 +56,28 @@ namespace Protogen.Models.Generators
         public CodeGenerator EndBlock(string closer = null)
         {
             DecreaseIndentation();
-            AddWhitespaceToLineIfNeeded();
-            AppendLine(closer ?? _blockCloser);
+            AppendLine(closer ?? _blockCloser, false);
             return this;
         }
 
-        public CodeGenerator Append(string str)
+        public CodeGenerator Append(string str, bool isCodeLine = true)
         {
             var lines = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             foreach (var line in lines.Take(lines.Length - 1)) AppendLine(line);
 
-            AddWhitespaceToLineIfNeeded();
+            AddWhitespaceToLineIfNeeded(isCodeLine);
             _builder.Append(lines.Last());
 
             return this;
         }
 
-        public CodeGenerator AppendLine(string str = "")
+        public CodeGenerator AppendLine(string str = "", bool isCodeLine = true)
         {
             var lines = str.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             foreach (var line in lines)
             {
-                if (line.Length > 0) AddWhitespaceToLineIfNeeded();
-                _builder.AppendLine(line);
+                Append(line, isCodeLine);
+                _builder.AppendLine();
                 _isStartOfLine = true;
             }
             return this;
@@ -82,6 +86,13 @@ namespace Protogen.Models.Generators
         public override string ToString()
         {
             return _builder.ToString();
+        }
+
+        private bool _insertEmptyLineBeforeNextCodeLine = false;
+        public CodeGenerator EnsureEmptyLine()
+        {
+            _insertEmptyLineBeforeNextCodeLine = true;
+            return this;
         }
     }
 }
