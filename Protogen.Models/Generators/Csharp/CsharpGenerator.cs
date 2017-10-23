@@ -10,20 +10,29 @@ namespace Protogen.Models.Generators.Csharp
         public override Dictionary<string, string> Generate(Project project)
         {
             var results = new Dictionary<string, string>();
-            results[$"{project.Name.Pascalize()}.Models/{project.Name.Pascalize()}DbContext.cs"] = new EFDbContext(project).Generate();
-            foreach (var model in project.AllModels)
+            if (project.AllModels.Where(m => m.Database).Any())
             {
-                results[$"{project.Name.Pascalize()}.Models/{model.Name.Pascalize()}.cs"] = new EFModel(model).Generate();
+                results[$"{project.Name.Pascalize()}.Models/{project.Name.Pascalize()}DbContext.cs"] = new EFDbContext(project).Generate();
+                foreach (var model in project.AllModels.Where(m => m.Database))
+                {
+                    results[$"{project.Name.Pascalize()}.Models/{model.Name.Pascalize()}.cs"] = new EFModel(model).Generate();
+                }
             }
 
-            if (project.AllQueries.Any() || project.AllMutations.Any())
+            if (project.AllQueries.Any() || project.AllMutations.Any() || project.AllModels.Where(m => m.GraphQL).Any())
             {
                 results[$"{project.Name.Pascalize()}.GraphQL/{project.Name.Pascalize()}Schema.cs"] = new QLSchema(project).Generate();
                 if (project.AllQueries.Any())
                 {
                     results[$"{project.Name.Pascalize()}.GraphQL/{project.Name.Pascalize()}QueryBase.cs"] = new QLFieldsClass(project, "Query", project.AllQueries).Generate();
                 }
-                foreach (var model in project.AllModels)
+
+                if (project.AllMutations.Any())
+                {
+                    results[$"{project.Name.Pascalize()}.GraphQL/{project.Name.Pascalize()}MutationBase.cs"] = new QLFieldsClass(project, "Mutation", project.AllMutations).Generate();
+                }
+
+                foreach (var model in project.AllModels.Where(m => m.GraphQL))
                 {
                     results[$"{project.Name.Pascalize()}.GraphQL/{model.Name.Pascalize()}Type.cs"] = new QLType(model).Generate();
                 }
