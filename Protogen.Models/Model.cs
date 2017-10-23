@@ -21,6 +21,7 @@ namespace Protogen.Models
         public QLField[] Queries { get; set; }
         public QLField[] Mutations { get; set; }
         public Project Project { get; set; }
+        public string Description { get; set; }
 
         private List<ModelField> _fields = new List<ModelField>();
         public IEnumerable<ModelField> AllFields { get => _fields.OrderBy(f => !f.PrimaryKey).ThenBy(f => f.Name); }
